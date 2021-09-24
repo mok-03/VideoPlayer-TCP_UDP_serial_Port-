@@ -6,14 +6,15 @@ using System.Threading;
 public abstract class Multiy
 {
 
-    readonly public int SemaphoreMaxCount = 10;
+   // readonly public int SemaphoreMaxCount = 10;
     public delegate void NetEvent(string str);
-    public NetEvent nevent;
+    private NetEvent nevent = null;
     protected bool threadEnt = false;
     protected Byte[] bytes = new Byte[256];
     protected string Text = null;
     protected Thread thread = null;
     public string GetText { get { return Text; } }
+    public NetEvent SetEvent { set { nevent = value; } } // Get Key Play Func
     static public XMLData xml;
 
     public static string ComputerIP
@@ -22,6 +23,7 @@ public abstract class Multiy
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
             string ClientIP = string.Empty;
+
             for (int i = 0; i < host.AddressList.Length; i++)
             {
                 if (host.AddressList[i].AddressFamily == AddressFamily.InterNetwork)
@@ -36,7 +38,6 @@ public abstract class Multiy
 
     public virtual void Begin(NetEvent @event)
     {
-
         nevent = @event;
         thread = new Thread(new ThreadStart(Reseve));
         thread.Start();
@@ -46,45 +47,7 @@ public abstract class Multiy
     {
         nevent(Text);
     }
-
-
     public virtual void Send() { }
 
-
-}
-
-public class A : Multiy
-{
-    public override void Begin(NetEvent @event)
-    {
-        base.Begin(@event);
-    }
-
-    public override void End()
-    {
-
-    }
-
-    public override void Reseve()
-    {
-        Text = "10";
-    }
-    public void NetTextEvent(string str)
-    {
-
-    }
-}
-
-public class M
-{
-
-    A a;
-    public void C()
-    {
-        a = new A();
-
-
-        // a.Begin(NetTextEvent(Text)); //begin에서 this(a)의 
-    }
 }
 

@@ -13,6 +13,7 @@ public class videoPlayr :MonoBehaviour
      public bool clipupdate = false;
     public VideoPlayer uivideoPlayer;
     public VideoEventSystem videoEventSystem;
+
     private void Start()
     {
         int i = 0;

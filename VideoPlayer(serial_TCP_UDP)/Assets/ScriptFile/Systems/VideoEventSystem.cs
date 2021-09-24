@@ -7,7 +7,7 @@ public class VideoEventSystem
    public videoPlayr video = null;
    public Dictionary<string, int> dic = null;
 
-     public void PortInputData(string Key) //회신받ㅇ면 이거쓰면됨
+     public void PortInputData(string Key) //key = video
     {
         try
         {
@@ -20,7 +20,7 @@ public class VideoEventSystem
 
         }
     }
-     public void DictionarySetting(string Key,int vlu)
+     public void DictionarySetting(string Key,int vlu) 
     {
         if(dic == null)
         {

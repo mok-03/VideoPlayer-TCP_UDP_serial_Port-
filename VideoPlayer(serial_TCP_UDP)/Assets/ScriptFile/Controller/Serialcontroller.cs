@@ -1,6 +1,5 @@
-﻿
-using System.IO.Ports;
-using System.Text;
+﻿using System.IO.Ports;
+
 
 public class Serialcontroller : Multiy
 {
@@ -25,10 +24,11 @@ public class Serialcontroller : Multiy
     }
     public void openPort()
     {
+
         if (_serialPort.IsOpen) return;
         _serialPort.Open(); //시리얼 오픈~
-    }
 
+    }
     public void initport()
     {
 
