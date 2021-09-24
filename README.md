@@ -20,3 +20,13 @@ UDP - BasePortSetting 887 - ip는 자동세팅
 
 Key 1,2,3 
 
+포트연결 실패 오류시  ( serial port err
+
+and U want Test this Project
+
+1: Virtual serial Ports Emulaotr Download 
+and create Connector COM11 and COM12
+
+2: Download j1c 5.1.2v  <- this programe is Serial,TCP testing
+or Mobile UDP,TCP test app 
+Download
