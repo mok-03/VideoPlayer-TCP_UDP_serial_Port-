@@ -20,11 +20,11 @@ Base Setting Com11:Com12;
 
 TCP  - BasePortSetting 8882 - ip U r Computer IP (ipconfig)
 
-UDP - BasePortSetting 887 - ip는 자동세팅 
+UDP - BasePortSetting 887 - 자신 ip는 자동세팅 (my ip auto setting
 
 Key 1,2,3 
 
-포트연결 실패 오류시  ( serial port err
+시리얼 포트 오류시  ( serial port err
 
 and U want Test this Project
 
