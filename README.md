@@ -12,7 +12,11 @@ Read XML file (Assets>SteamingAssets>XML) <- BaseSetting
 프로젝트 
 통신확인방법
 
-우선 시리얼 포트를 열어야 한다 Base Setting Com11:Com12;
+우선 시리얼 포트를 열어야 한다
+
+First you need to open the serial port
+
+Base Setting Com11:Com12;
 
 TCP  - BasePortSetting 8882 - ip U r Computer IP (ipconfig)
 
