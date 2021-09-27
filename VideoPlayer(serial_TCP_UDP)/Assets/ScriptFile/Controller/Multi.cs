@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-public abstract class Multiy
+public abstract class Multi
 {
 
    // readonly public int SemaphoreMaxCount = 10;

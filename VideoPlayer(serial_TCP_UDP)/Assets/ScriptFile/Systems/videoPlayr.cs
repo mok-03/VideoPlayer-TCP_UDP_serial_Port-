@@ -1,53 +1,36 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
 
-public class videoPlayr :MonoBehaviour
-{ 
-    public  readonly int BaseplayVideoNumber = 0;
+public class videoPlayr : MonoBehaviour
+{
+    public readonly int BaseplayVideoNumber = 0;
 
-    public List<string> vidoPlayList;
-     public int playVideoNumber = 0;
-     public bool clipupdate = false;
+    public string videoPlayURL;
+
+
+    public bool clipupdate = false;
     public VideoPlayer uivideoPlayer;
-    public VideoEventSystem videoEventSystem;
+
 
     private void Start()
     {
-        int i = 0;
-        videoEventSystem = new VideoEventSystem();
-        videoEventSystem.video = this;
-        foreach(var data in Multiy.xml.Key)
-        {
-           
-            vidoPlayList.Add(Application.streamingAssetsPath + "/vidoPlayer/" + data.videoName + ".mp4");
-            videoEventSystem.DictionarySetting(data.Keyvalsue, i++);
-        }
+        videoPlayURL = ("Assets/Resources/vidoPlayer/M1.mp4"); //BaseVideo
     }
 
-    public void UpdateClip()
+    public void UpdateClip() //Playing Video setting the URL
     {
-       
-        if (playVideoNumber > Multiy.xml.Key.Count)
-        {
-            Debug.LogWarning("숫자값이 너무큼");
-            playVideoNumber = 0;
-        }
-        else
-        {
-            clipupdate = true;
-        }
-
+        uivideoPlayer.url = videoPlayURL;
     }
-    private void Update()
+
+    public void InputData(string str) //Find Video Name and videoplayer set video URL
     {
-        if (clipupdate == true)
-        {
-            uivideoPlayer.url  = vidoPlayList[playVideoNumber];
-            clipupdate = false;
-        }
-    }
+        var Vdata = Multi.xml.Key.Find(data => data.Keyvalue == (str));
+        if (Vdata != null)
+            videoPlayURL = (Application.streamingAssetsPath + "/vidoPlayer/" + Vdata.videoName + ".mp4");
 
+    }
 }

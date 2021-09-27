@@ -1,7 +1,8 @@
-﻿using System.IO.Ports;
+﻿using System;
+using System.IO.Ports;
 
 
-public class Serialcontroller : Multiy
+public class Serialcontroller : Multi
 {
     // Start is called before the first frame update
     SerialPort _serialPort;
@@ -25,9 +26,9 @@ public class Serialcontroller : Multiy
     public void openPort()
     {
 
-        if (_serialPort.IsOpen) return;
-        _serialPort.Open(); //시리얼 오픈~
-
+            if (_serialPort.IsOpen) return;
+            _serialPort.Open(); //시리얼 오픈~
+ 
     }
     public void initport()
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO.Ports;
 using UnityEngine;
@@ -23,31 +24,31 @@ public class MainEventSys : MonoBehaviour
         if (mainEventSys == null)
         {
             mainEventSys = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
 
 
         XmlFilelocation = Application.streamingAssetsPath + "/XML/XMLData.xml";
-        Multiy.xml = new XMLData();
-        Multiy.xml.MakeData();
-        Multiy.xml = XMLPaser.Load<XMLData>(XmlFilelocation, Multiy.xml);
-        if (Multiy.xml == null)
+        Multi.xml = new XMLData();
+        Multi.xml.MakeData();
+        Multi.xml = XMLPaser.Load<XMLData>(XmlFilelocation, Multi.xml);
+        if (Multi.xml == null)
         {
 
-            Multiy.xml = new XMLData();
-            Multiy.xml.MakeData();
-            Multiy.xml.netPortdata.TCPportNumber = 8882;
-            Multiy.xml.netPortdata.UDPportNumber = 887;
-            Multiy.xml.serialPortOptionData.COMPort = "COM11";
-            Multiy.xml.serialPortOptionData.BaudRate = 9600;
-            Multiy.xml.serialPortOptionData.DataBits = 8;
-            Multiy.xml.serialPortOptionData.Parity = Parity.None;
-            Multiy.xml.serialPortOptionData.StopBits = StopBits.One;
+            Multi.xml = new XMLData();
+            Multi.xml.MakeData();
+            Multi.xml.netPortdata.TCPportNumber = 8882;
+            Multi.xml.netPortdata.UDPportNumber = 887;
+            Multi.xml.serialPortOptionData.COMPort = "COM11";
+            Multi.xml.serialPortOptionData.BaudRate = 9600;
+            Multi.xml.serialPortOptionData.DataBits = 8;
+            Multi.xml.serialPortOptionData.Parity = Parity.None;
+            Multi.xml.serialPortOptionData.StopBits = StopBits.One;
             videoData data = new videoData();
-            data.Keyvalsue = "1";
+            data.Keyvalue = "1";
             data.videoName = "M1";
-            Multiy.xml.Key.Add(data);
-            XMLPaser.Save<XMLData>(XmlFilelocation, Multiy.xml);
+            Multi.xml.Key.Add(data);
+            XMLPaser.Save<XMLData>(XmlFilelocation, Multi.xml);
         }
 
         InitNetController();
@@ -56,7 +57,9 @@ public class MainEventSys : MonoBehaviour
             netUIEventMenager = new NetUIEventMenager();
 
         netUIEventMenager.Begin();
+
     }
+
     // Update is called once per frame
     private void Update()
     {
@@ -73,8 +76,11 @@ public class MainEventSys : MonoBehaviour
         UDP = new UDPcontroller();
         serial = new Serialcontroller();
         TCP = new TCPcontroller();
+       
+            UDP.Begin(NetTextEvent);
+            // open the Port
 
-        UDP.Begin(NetTextEvent);
+
         serial.Begin(NetTextEvent);
         TCP.Begin(NetTextEvent);
 
@@ -91,16 +97,14 @@ public class MainEventSys : MonoBehaviour
     {
 
         Debug.Log(str);
-        videoPlayer.videoEventSystem.PortInputData(str);
-        //ui전환 이벤트 큐 추가 딕셔너리로 호출 이벤트 사용 또는 영상물 이름으로 호출 URL
-        netUIEventMenager.SetFuncs(VideoEvent);
+        videoPlayer.InputData(str); 
+        netUIEventMenager.SetFuncs(VideoEvent); 
 
     }
 
     public void VideoEvent()
     {
         videoPlayer.UpdateClip();
-
     }
 
 

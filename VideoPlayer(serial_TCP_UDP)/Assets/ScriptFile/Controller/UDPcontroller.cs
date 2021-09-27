@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-public class UDPcontroller : Multiy
+public class UDPcontroller : Multi
 {
     UdpClient server = null;
     public override void Begin(NetEvent @event)

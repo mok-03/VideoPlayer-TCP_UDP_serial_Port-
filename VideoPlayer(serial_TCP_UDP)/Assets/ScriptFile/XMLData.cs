@@ -34,6 +34,6 @@ public class SerialPortOptionData
 
 public class videoData
 {
-    public string Keyvalsue;
+    public string Keyvalue;
     public string videoName;
 }
