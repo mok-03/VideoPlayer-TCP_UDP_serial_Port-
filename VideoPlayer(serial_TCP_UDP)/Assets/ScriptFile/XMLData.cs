@@ -9,14 +9,14 @@ public class XMLData
     public List<videoData> Key = null;
     public List<int> TCPportNumber = null;
     public NetPortdata netPortdata = null;
-    public SerialPortOptionData serialPortOptionData = null;
+    public List<SerialPortOptionData> serialPortOptionData = null;
 
     public void MakeData()
     {
 
         Key = new List<videoData>();
         netPortdata = new NetPortdata();
-        serialPortOptionData = new SerialPortOptionData();
+        serialPortOptionData = new List<SerialPortOptionData>();
     }
 }
 public class NetPortdata

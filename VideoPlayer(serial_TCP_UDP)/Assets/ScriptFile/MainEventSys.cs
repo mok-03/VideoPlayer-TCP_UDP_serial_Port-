@@ -14,8 +14,9 @@ public class MainEventSys : MonoBehaviour
     private static string XmlFilelocation;
 
     UDPcontroller UDP = null;
-    Serialcontroller serial = null;
+    List<Serialcontroller> serial = null;
     List<TCPcontroller> TCP = null;
+    //want single TCP&serial u can Destory List
 
 
 
@@ -40,11 +41,16 @@ public class MainEventSys : MonoBehaviour
             Multi.xml.netPortdata.TCPportNumber = new List<int>();
             Multi.xml.netPortdata.TCPportNumber.Add(8882);
             Multi.xml.netPortdata.UDPportNumber = 887;
-            Multi.xml.serialPortOptionData.COMPort = "COM11";
-            Multi.xml.serialPortOptionData.BaudRate = 9600;
-            Multi.xml.serialPortOptionData.DataBits = 8;
-            Multi.xml.serialPortOptionData.Parity = Parity.None;
-            Multi.xml.serialPortOptionData.StopBits = StopBits.One;
+            SerialPortOptionData serialPortOptionData = new SerialPortOptionData();
+            serialPortOptionData.COMPort = "COM11";
+            serialPortOptionData.BaudRate = 9600;
+            serialPortOptionData.DataBits = 8;
+            serialPortOptionData.Parity = Parity.None;
+            serialPortOptionData.StopBits = StopBits.One;
+            Multi.xml.serialPortOptionData.Add(serialPortOptionData);
+
+           
+
             videoData data = new videoData();
             data.Keyvalue = "1";
             data.videoName = "M1";
@@ -75,15 +81,23 @@ public class MainEventSys : MonoBehaviour
     private void InitNetController()
     {
         UDP = new UDPcontroller();
-        serial = new Serialcontroller();
-        TCP = new List<TCPcontroller>();
 
+        serial = new List<Serialcontroller>();
+        for (int i = 0; i < Multi.xml.serialPortOptionData.Count; i++)
+            serial.Add(new Serialcontroller());
+
+        TCP = new List<TCPcontroller>();
         for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
             TCP.Add(new TCPcontroller());
 
-        UDP.Begin(NetTextEvent);
 
-        serial.Begin(NetTextEvent);
+
+
+
+        UDP.Begin(NetTextEvent); // Anycast
+
+        for (int i = 0; i < Multi.xml.serialPortOptionData.Count; i++)
+            serial[i].Begin(NetTextEvent);
 
         for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
             TCP[i].Begin(NetTextEvent);
@@ -93,7 +107,10 @@ public class MainEventSys : MonoBehaviour
     private void EndNetController()
     {
         UDP.End();
-        serial.End();
+
+        for (int i = 0; i < Multi.xml.serialPortOptionData.Count; i++)
+            serial[i].End();
+
         for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
             TCP[i].End();
     }
@@ -101,10 +118,12 @@ public class MainEventSys : MonoBehaviour
     public void NetTextEvent(string str)
     {
 
-        Debug.Log(str);
+        Debug.Log(str);  
+        //videoplayer 두개 사용할려면 여기에 videEnvet1,videoplayer1 을 하나더만들고
+       //bool로 확인후 번갈아가면서 인덱스 추가하면 
         videoPlayer.InputData(str);
         netUIEventMenager.SetFuncs(VideoEvent);
- 
+
 
     }
 

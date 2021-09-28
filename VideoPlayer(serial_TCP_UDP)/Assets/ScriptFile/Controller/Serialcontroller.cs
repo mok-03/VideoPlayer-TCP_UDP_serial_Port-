@@ -6,9 +6,10 @@ public class Serialcontroller : Multi
 {
     // Start is called before the first frame update
     SerialPort _serialPort;
-
+    static int serialportNum = 0;
     public override void Begin(NetEvent @event)
     {
+
         _serialPort = new SerialPort();
         initport();
         base.Begin(@event);
@@ -26,18 +27,17 @@ public class Serialcontroller : Multi
     public void openPort()
     {
 
-            if (_serialPort.IsOpen) return;
-            _serialPort.Open(); //시리얼 오픈~
- 
+        if (_serialPort.IsOpen) return;
+        _serialPort.Open(); //시리얼 오픈~
+        serialportNum++;
     }
     public void initport()
     {
-
-        _serialPort.PortName = xml.serialPortOptionData.COMPort;
-        _serialPort.BaudRate = xml.serialPortOptionData.BaudRate;
-        _serialPort.DataBits = xml.serialPortOptionData.DataBits;
-        _serialPort.Parity = xml.serialPortOptionData.Parity;
-        _serialPort.StopBits = xml.serialPortOptionData.StopBits;
+        _serialPort.PortName = xml.serialPortOptionData[serialportNum].COMPort;
+        _serialPort.BaudRate = xml.serialPortOptionData[serialportNum].BaudRate;
+        _serialPort.DataBits = xml.serialPortOptionData[serialportNum].DataBits;
+        _serialPort.Parity = xml.serialPortOptionData[serialportNum].Parity;
+        _serialPort.StopBits = xml.serialPortOptionData[serialportNum].StopBits;
         openPort();
     }
 

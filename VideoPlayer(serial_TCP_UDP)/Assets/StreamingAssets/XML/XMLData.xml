@@ -26,10 +26,19 @@
     <UDPportNumber>887</UDPportNumber>
   </netPortdata>
   <serialPortOptionData>
-    <COMPort>COM32</COMPort>
-    <BaudRate>9600</BaudRate>
-    <DataBits>8</DataBits>
-    <Parity>None</Parity>
-    <StopBits>One</StopBits>
+    <SerialPortOptionData>
+      <COMPort>COM11</COMPort>
+      <BaudRate>9600</BaudRate>
+      <DataBits>8</DataBits>
+      <Parity>None</Parity>
+      <StopBits>One</StopBits>
+    </SerialPortOptionData>
+	    <SerialPortOptionData>
+      <COMPort>COM32</COMPort>
+      <BaudRate>9600</BaudRate>
+      <DataBits>8</DataBits>
+      <Parity>None</Parity>
+      <StopBits>One</StopBits>
+    </SerialPortOptionData>
   </serialPortOptionData>
 </XMLData>
