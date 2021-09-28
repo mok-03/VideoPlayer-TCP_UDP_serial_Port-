@@ -9,6 +9,9 @@ Edit->Project Settings->Player->Other Setting->.NET
 
 Read XML file (Assets>SteamingAssets>XML) <- BaseSetting
 
+and we can (TCP&Serial) Multiple Connect 
+Way add XMLData.xml file Lists <SerialPortOptionData>,  <TCPportNumber>
+
 프로젝트 
 통신확인방법
 
