@@ -7,11 +7,13 @@ using UnityEngine;
 public class XMLData
 {
     public List<videoData> Key = null;
+    public List<int> TCPportNumber = null;
     public NetPortdata netPortdata = null;
     public SerialPortOptionData serialPortOptionData = null;
 
     public void MakeData()
     {
+
         Key = new List<videoData>();
         netPortdata = new NetPortdata();
         serialPortOptionData = new SerialPortOptionData();
@@ -19,7 +21,7 @@ public class XMLData
 }
 public class NetPortdata
 {
-    public int TCPportNumber;
+    public List<int> TCPportNumber;
     public int UDPportNumber;
 }
 

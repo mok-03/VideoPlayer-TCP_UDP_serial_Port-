@@ -8,11 +8,12 @@ public class TCPcontroller : Multi
     TcpListener server = null;
     private bool conecting;
     NetworkStream stream;
-
+    static int TCP_PortCount = 0;
     public override void Begin(NetEvent @event)
     {
+
         createServer();
-        base.Begin(@event); //리시브 스레드 실행
+        base.Begin(@event);
     }
 
     public override void End()
@@ -45,8 +46,12 @@ public class TCPcontroller : Multi
             {
                 IPAddress localAddr = IPAddress.Parse(ComputerIP);
                 Debug.Log("this ip" + localAddr);
-                server = new TcpListener(localAddr, xml.netPortdata.TCPportNumber);
+
+                if (xml.netPortdata.TCPportNumber.Count >= TCP_PortCount)
+                    server = new TcpListener(localAddr, xml.netPortdata.TCPportNumber[TCP_PortCount++]);
                 server.Start();
+
+
             }
         }
         catch (Exception e)
@@ -61,10 +66,10 @@ public class TCPcontroller : Multi
     {
 
         int i;
-        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0) // stream.Read(내부에서 돌다가 새로운데이터가 들어오면 나오는거같음
+        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
         {
             Text = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-            Text = Text.ToUpper();
+            //   Text = Text.ToUpper(); //대문자치환
             base.Reseve();
         }
 

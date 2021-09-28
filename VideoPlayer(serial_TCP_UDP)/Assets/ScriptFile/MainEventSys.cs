@@ -15,7 +15,7 @@ public class MainEventSys : MonoBehaviour
 
     UDPcontroller UDP = null;
     Serialcontroller serial = null;
-    TCPcontroller TCP = null;
+    List<TCPcontroller> TCP = null;
 
 
 
@@ -37,7 +37,8 @@ public class MainEventSys : MonoBehaviour
 
             Multi.xml = new XMLData();
             Multi.xml.MakeData();
-            Multi.xml.netPortdata.TCPportNumber = 8882;
+            Multi.xml.netPortdata.TCPportNumber = new List<int>();
+            Multi.xml.netPortdata.TCPportNumber.Add(8882);
             Multi.xml.netPortdata.UDPportNumber = 887;
             Multi.xml.serialPortOptionData.COMPort = "COM11";
             Multi.xml.serialPortOptionData.BaudRate = 9600;
@@ -75,14 +76,17 @@ public class MainEventSys : MonoBehaviour
     {
         UDP = new UDPcontroller();
         serial = new Serialcontroller();
-        TCP = new TCPcontroller();
-       
-            UDP.Begin(NetTextEvent);
-            // open the Port
+        TCP = new List<TCPcontroller>();
 
+        for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
+            TCP.Add(new TCPcontroller());
+
+        UDP.Begin(NetTextEvent);
 
         serial.Begin(NetTextEvent);
-        TCP.Begin(NetTextEvent);
+
+        for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
+            TCP[i].Begin(NetTextEvent);
 
 
     }
@@ -90,15 +94,17 @@ public class MainEventSys : MonoBehaviour
     {
         UDP.End();
         serial.End();
-        TCP.End();
+        for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
+            TCP[i].End();
     }
 
     public void NetTextEvent(string str)
     {
 
-        Debug.Log(str);
-        videoPlayer.InputData(str); 
-        netUIEventMenager.SetFuncs(VideoEvent); 
+        Debug.Log(str);//문제발견 str은 바로 바뀔텐데 video event는 그뒤 실행됨
+        videoPlayer.InputData(str);
+        netUIEventMenager.SetFuncs(VideoEvent);
+ 
 
     }
 

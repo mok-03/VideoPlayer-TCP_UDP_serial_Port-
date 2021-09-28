@@ -7,30 +7,28 @@ using UnityEngine.Video;
 
 public class videoPlayr : MonoBehaviour
 {
-    public readonly int BaseplayVideoNumber = 0;
 
-    public string videoPlayURL;
-
-
-    public bool clipupdate = false;
+    //private string videoPlayURL;
     public VideoPlayer uivideoPlayer;
-
+    private Queue<string> videoPlayURL = null; 
+    //Maiking option add EX( Loop,speed,VideoEndFunc(overloading
 
     private void Start()
     {
-        videoPlayURL = ("Assets/Resources/vidoPlayer/M1.mp4"); //BaseVideo
+        videoPlayURL = new Queue<string>();
+        videoPlayURL.Enqueue("Assets/Resources/vidoPlayer/M1.mp4"); //BaseVideo
     }
 
     public void UpdateClip() //Playing Video setting the URL
     {
-        uivideoPlayer.url = videoPlayURL;
+        uivideoPlayer.url = videoPlayURL.Dequeue();
     }
 
     public void InputData(string str) //Find Video Name and videoplayer set video URL
     {
         var Vdata = Multi.xml.Key.Find(data => data.Keyvalue == (str));
         if (Vdata != null)
-            videoPlayURL = (Application.streamingAssetsPath + "/vidoPlayer/" + Vdata.videoName + ".mp4");
+            videoPlayURL.Enqueue (Application.streamingAssetsPath + "/vidoPlayer/" + Vdata.videoName + ".mp4");
 
     }
 }
