@@ -10,18 +10,21 @@ public class videoPlayr : MonoBehaviour
 
     //private string videoPlayURL;
     public VideoPlayer uivideoPlayer;
-    private Queue<string> videoPlayURL = null; 
+    private Queue<string> videoPlayURL = null;
+    private readonly string VideoBaseURL = "Assets/Resources/vidoPlayer/M1.mp4";
     //Maiking option add EX( Loop,speed,VideoEndFunc(overloading
 
     private void Start()
     {
         videoPlayURL = new Queue<string>();
-        videoPlayURL.Enqueue("Assets/Resources/vidoPlayer/M1.mp4"); //BaseVideo
+     //   videoPlayURL.Enqueue(VideoBaseURL); //BaseVideo
+        uivideoPlayer.url = VideoBaseURL;
     }
 
     public void UpdateClip() //Playing Video setting the URL
     {
-        uivideoPlayer.url = videoPlayURL.Dequeue();
+            uivideoPlayer.url = videoPlayURL.Dequeue(); ;
+
     }
 
     public void InputData(string str) //Find Video Name and videoplayer set video URL

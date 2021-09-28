@@ -2,28 +2,31 @@
 <XMLData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Key>
     <videoData>
-      <Keyvalsue>1</Keyvalsue>
+      <Keyvalue>1</Keyvalue>
       <videoName>M1</videoName>
     </videoData>
 	    <videoData>
-      <Keyvalsue>2</Keyvalsue>
+      <Keyvalue>2</Keyvalue>
       <videoName>M2</videoName>
     </videoData>
 	    <videoData>
-      <Keyvalsue>3</Keyvalsue>
+      <Keyvalue>3</Keyvalue>
       <videoName>M3</videoName>
     </videoData>
-	<videoData>
-      <Keyvalsue>4</Keyvalsue>
+	    <videoData>
+      <Keyvalue>k</Keyvalue>
       <videoName>M4</videoName>
     </videoData>
   </Key>
   <netPortdata>
-    <TCPportNumber>8882</TCPportNumber>
+    <TCPportNumber>
+      <int>8882</int>
+      <int>8883</int>
+    </TCPportNumber>
     <UDPportNumber>887</UDPportNumber>
   </netPortdata>
   <serialPortOptionData>
-    <COMPort>COM11</COMPort>
+    <COMPort>COM32</COMPort>
     <BaudRate>9600</BaudRate>
     <DataBits>8</DataBits>
     <Parity>None</Parity>

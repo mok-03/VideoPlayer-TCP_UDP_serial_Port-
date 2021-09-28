@@ -101,7 +101,7 @@ public class MainEventSys : MonoBehaviour
     public void NetTextEvent(string str)
     {
 
-        Debug.Log(str);//문제발견 str은 바로 바뀔텐데 video event는 그뒤 실행됨
+        Debug.Log(str);
         videoPlayer.InputData(str);
         netUIEventMenager.SetFuncs(VideoEvent);
  
