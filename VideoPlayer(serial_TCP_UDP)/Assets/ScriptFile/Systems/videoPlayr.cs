@@ -23,7 +23,10 @@ public class videoPlayr : MonoBehaviour
 
     public void UpdateClip() //Playing Video setting the URL
     {
-            uivideoPlayer.url = videoPlayURL.Dequeue(); ;
+        if(videoPlayURL.Count != 0)
+            uivideoPlayer.url = videoPlayURL.Dequeue(); 
+        else
+            uivideoPlayer.url = VideoBaseURL;
 
     }
 

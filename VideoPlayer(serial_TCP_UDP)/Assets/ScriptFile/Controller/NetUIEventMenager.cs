@@ -8,6 +8,7 @@ public class NetUIEventMenager
 
     private Queue<DelEvent> delQueue = null;
     private DelEvent delEvent = null;
+    private object lockObject = new object(); //lock
     public void UpdateQueue()
     {
         delEvent = delQueue.Dequeue();
@@ -15,8 +16,11 @@ public class NetUIEventMenager
     }
     public void SetFuncs(DelEvent del)
     {
-        delQueue.Enqueue(del);
+        lock (lockObject)
+        { //other thread include this Queue so locking the queue 
 
+            delQueue.Enqueue(del);
+        }
     }
     public bool checkQueueStack()
     {
