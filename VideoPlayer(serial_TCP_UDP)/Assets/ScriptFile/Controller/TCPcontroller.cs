@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using UnityEngine;
 
 public class TCPcontroller : Multi
 {
-    TcpListener server = null;
+    static TcpListener server = null;
+
     private bool conecting;
+    private TcpClient client;
+    static private object TCPKEY = new object();
     NetworkStream stream;
-    static int TCP_PortCount = 0;
     public override void Begin(NetEvent @event)
     {
 
@@ -21,19 +24,24 @@ public class TCPcontroller : Multi
         croseServer();
     }
 
+ //MinEvet->BeginFunc->base.Begin->Reseve(Thread);
     public override void Reseve()
     {
         if (conecting != true)
         {
-            TcpClient client = server.AcceptTcpClient();
-            Debug.Log("connected..");
-            conecting = true;
-            stream = client.GetStream();
+            clientConecting();
         }
 
         while (!threadEnt)
         {
+            Thread.Sleep(1);
+
             GetClientMessage();
+            if (Text != null)
+            {
+                base.Reseve();
+                Text = null;
+            }
         }
 
     }
@@ -45,13 +53,9 @@ public class TCPcontroller : Multi
             if (server == null)
             {
                 IPAddress localAddr = IPAddress.Parse(ComputerIP);
-                Debug.Log("this ip" + localAddr);
-
-                if (xml.netPortdata.TCPportNumber.Count >= TCP_PortCount)
-                    server = new TcpListener(localAddr, xml.netPortdata.TCPportNumber[TCP_PortCount++]);
+                Debug.Log("My server ip" + localAddr);
+                server = new TcpListener(localAddr, xml.netPortdata.TCPportNumber);
                 server.Start();
-
-
             }
         }
         catch (Exception e)
@@ -64,31 +68,80 @@ public class TCPcontroller : Multi
 
     void GetClientMessage()
     {
-
-        int i;
-        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+        if (stream.CanRead && stream.DataAvailable)
         {
-            Text = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+            Int32 size = stream.Read(bytes, 0, bytes.Length);
+            Text = System.Text.Encoding.ASCII.GetString(bytes, 0, size);
+            if(Text == xml.netPortdata.TCPExitKey)
+            {
+                Debug.Log(Text);
+                resetting();
+                Text = null;
+            }
             //   Text = Text.ToUpper(); //대문자치환
-            base.Reseve();
         }
-
-
     }
 
+    //crose the server
     void croseServer()
     {
-
         threadEnt = true;
-        byte[] msg = System.Text.Encoding.ASCII.GetBytes("deconect(server)");
-        if (stream != null)
+        if (client != null)
         {
-            stream.Write(msg, 0, msg.Length);
-            stream.Close();
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes("deconect(server)");
+            if (stream != null)
+            {
+                stream.Write(msg, 0, msg.Length);
+                stream.Close();
+            }
         }
-        thread.Abort();
-        server.Stop();
         conecting = false;
+        thread.Join();
+    }
+
+
+    void clientConecting()
+    {
+        while (!threadEnt && client == null)
+        {
+            try
+            {
+                lock (TCPKEY) //LOCK말고 STATIC LIST사용도 나쁘지 않아보임
+                {
+                    if (server.Pending())
+                    {//get client 
+                        client = server.AcceptTcpClient(); 
+                    }
+                }
+            }
+            catch (SocketException e) when (e.SocketErrorCode == SocketError.Interrupted)
+            {
+                throw new OperationCanceledException();
+
+            }
+        }
+
+
+        if (!threadEnt && client != null)
+        {
+            Debug.Log("connected..");
+            stream = client.GetStream();
+            Socket c = client.Client;
+            IPEndPoint ip_point = (IPEndPoint)c.RemoteEndPoint;
+            uniquenIP = ip_point.Address.ToString();
+            conecting = true;
+        }
+    }
+    public void resetting()
+    {
+        client.Close();
+        client = null;
+        clientConecting();
+
+    }
+    static public void serverstop()
+    {
+        server.Stop();
 
     }
 

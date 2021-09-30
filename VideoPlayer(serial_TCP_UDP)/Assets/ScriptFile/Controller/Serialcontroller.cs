@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
-
+using System.Threading;
 
 public class Serialcontroller : Multi
 {
@@ -9,10 +9,11 @@ public class Serialcontroller : Multi
     static int serialportNum = 0;
     public override void Begin(NetEvent @event)
     {
-
         _serialPort = new SerialPort();
         initport();
         base.Begin(@event);
+        thread.IsBackground = true; 
+        //main(UI)thread가 종료되면 같이종료됨 base(false)는 계속돌아감
     }
 
     public override void End()
@@ -27,8 +28,8 @@ public class Serialcontroller : Multi
     public void openPort()
     {
 
-        if (_serialPort.IsOpen) return;
-        _serialPort.Open(); //시리얼 오픈~
+        if (_serialPort.IsOpen) {return; }
+        _serialPort.Open(); 
         serialportNum++;
     }
     public void initport()
@@ -38,17 +39,24 @@ public class Serialcontroller : Multi
         _serialPort.DataBits = xml.serialPortOptionData[serialportNum].DataBits;
         _serialPort.Parity = xml.serialPortOptionData[serialportNum].Parity;
         _serialPort.StopBits = xml.serialPortOptionData[serialportNum].StopBits;
-        openPort();
+ 
+            openPort();
+        
+
     }
 
     private void SerialUpdate()
     {
         while (!threadEnt)
         {
+            Thread.Sleep(1);
+
             if (_serialPort.IsOpen)
                 Readline();
+
             if (Text != null)
             {
+                uniquenIP = _serialPort.PortName;
                 base.Reseve();
                 Text = null;
             }

@@ -13,10 +13,10 @@ public class UDPcontroller : Multi
     }
 
     public override void End()
-    {
-        threadEnt = true;
+    {    threadEnt = true;
+
         if (thread.IsAlive)
-            thread.Abort();
+            thread.Join();
         if (server != null)
             server.Close();
     }
@@ -26,9 +26,18 @@ public class UDPcontroller : Multi
         IPEndPoint epRemote = new IPEndPoint(IPAddress.Any, 0);
         while (!threadEnt)
         {
-            bytes = server.Receive(ref epRemote);
-            Text = Encoding.ASCII.GetString(bytes);
-            base.Reseve();
+            Thread.Sleep(1);
+
+            if (server.Available > 0)
+            {
+
+                bytes = server.Receive(ref epRemote);
+
+                Text = Encoding.ASCII.GetString(bytes);
+                uniquenIP = epRemote.Address.ToString();
+
+                base.Reseve();
+            }
         }
 
     }

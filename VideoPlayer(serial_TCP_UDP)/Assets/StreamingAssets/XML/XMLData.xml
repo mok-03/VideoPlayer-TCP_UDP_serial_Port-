@@ -19,11 +19,10 @@
     </videoData>
   </Key>
   <netPortdata>
-    <TCPportNumber>
-      <int>8882</int>
-      <int>8883</int>
-    </TCPportNumber>
+    <TcpConectionNum>2</TcpConectionNum>
+    <TCPportNumber>8882</TCPportNumber>
     <UDPportNumber>887</UDPportNumber>
+    <TCPExitKey>DeConect</TCPExitKey>
   </netPortdata>
   <serialPortOptionData>
     <SerialPortOptionData>

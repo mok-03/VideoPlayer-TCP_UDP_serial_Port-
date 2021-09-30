@@ -27,12 +27,12 @@ public class videoPlayr : MonoBehaviour
             uivideoPlayer.url = videoPlayURL.Dequeue(); 
         else
             uivideoPlayer.url = VideoBaseURL;
-
+      
     }
 
-    public void InputData(string str) //Find Video Name and videoplayer set video URL
+    public void InputData(Dictionary<string, string> str) //Find Video Name and videoplayer set video URL
     {
-        var Vdata = Multi.xml.Key.Find(data => data.Keyvalue == (str));
+        var Vdata = Multi.xml.Key.Find(data => data.Keyvalue == (str["TextData"]));
         if (Vdata != null)
             videoPlayURL.Enqueue (Application.streamingAssetsPath + "/vidoPlayer/" + Vdata.videoName + ".mp4");
 

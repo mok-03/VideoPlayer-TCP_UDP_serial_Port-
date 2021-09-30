@@ -22,6 +22,7 @@ public class MainEventSys : MonoBehaviour
 
     private void Awake()
     {
+        //singleton pattern
         if (mainEventSys == null)
         {
             mainEventSys = this;
@@ -33,13 +34,15 @@ public class MainEventSys : MonoBehaviour
         Multi.xml = new XMLData();
         Multi.xml.MakeData();
         Multi.xml = XMLPaser.Load<XMLData>(XmlFilelocation, Multi.xml);
+
+        #region MissingXML created BaseData Input and Save
         if (Multi.xml == null)
         {
 
             Multi.xml = new XMLData();
             Multi.xml.MakeData();
-            Multi.xml.netPortdata.TCPportNumber = new List<int>();
-            Multi.xml.netPortdata.TCPportNumber.Add(8882);
+            Multi.xml.netPortdata.TCPportNumber = (8882);
+            Multi.xml.netPortdata.TcpConectionNum = 1;
             Multi.xml.netPortdata.UDPportNumber = 887;
             SerialPortOptionData serialPortOptionData = new SerialPortOptionData();
             serialPortOptionData.COMPort = "COM11";
@@ -48,16 +51,13 @@ public class MainEventSys : MonoBehaviour
             serialPortOptionData.Parity = Parity.None;
             serialPortOptionData.StopBits = StopBits.One;
             Multi.xml.serialPortOptionData.Add(serialPortOptionData);
-
-           
-
             videoData data = new videoData();
             data.Keyvalue = "1";
             data.videoName = "M1";
             Multi.xml.Key.Add(data);
             XMLPaser.Save<XMLData>(XmlFilelocation, Multi.xml);
         }
-
+        #endregion
         InitNetController();
 
         if (netUIEventMenager == null)
@@ -71,7 +71,7 @@ public class MainEventSys : MonoBehaviour
     private void Update()
     {
         if (netUIEventMenager.checkQueueStack())
-            netUIEventMenager.UpdateQueue();
+            netUIEventMenager.UpdateQueue(); // output MinaEventQueue
     }
     void OnApplicationQuit()
     {
@@ -80,56 +80,60 @@ public class MainEventSys : MonoBehaviour
 
     private void InitNetController()
     {
+        #region create new classes
         UDP = new UDPcontroller();
-
         serial = new List<Serialcontroller>();
+        TCP = new List<TCPcontroller>();
+
         for (int i = 0; i < Multi.xml.serialPortOptionData.Count; i++)
             serial.Add(new Serialcontroller());
 
-        TCP = new List<TCPcontroller>();
-        for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
+
+        for (int i = 0; i < Multi.xml.netPortdata.TcpConectionNum; i++)
             TCP.Add(new TCPcontroller());
+        #endregion
 
-
-
-
-
+        #region BeginFunc
         UDP.Begin(NetTextEvent); // Anycast
 
         for (int i = 0; i < Multi.xml.serialPortOptionData.Count; i++)
             serial[i].Begin(NetTextEvent);
 
-        for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
+        for (int i = 0; i < Multi.xml.netPortdata.TcpConectionNum; i++)
             TCP[i].Begin(NetTextEvent);
-
+        #endregion
 
     }
     private void EndNetController()
     {
+
         UDP.End();
 
         for (int i = 0; i < Multi.xml.serialPortOptionData.Count; i++)
             serial[i].End();
 
-        for (int i = 0; i < Multi.xml.netPortdata.TCPportNumber.Count; i++)
+        for (int i = 0; i < Multi.xml.netPortdata.TcpConectionNum; i++)
             TCP[i].End();
+
+        TCPcontroller.serverstop();
     }
 
-    public void NetTextEvent(string str)
+    public void NetTextEvent(Dictionary<string, string> str)
     {
 
-        Debug.Log(str);  
-        //videoplayer 두개 사용할려면 여기에 videEnvet1,videoplayer1 을 하나더만들고
-       //bool로 확인후 번갈아가면서 인덱스 추가하면 
-        videoPlayer.InputData(str);
-        netUIEventMenager.SetFuncs(VideoEvent);
+        // Debug.Log(str.ContainsKey("TextData"));  
+        Debug.Log(str["IPData"]);
+        Debug.Log(str["TextData"]);
+
+        videoPlayer.InputData(str); //FindKey input Queue
+        netUIEventMenager.SetFuncs(VideoEvent); //Func Input Main EventQueue 
 
 
     }
 
     public void VideoEvent()
     {
-        videoPlayer.UpdateClip();
+        videoPlayer.UpdateClip(); //videoplayerObject input Video Queue URL
     }
 
 
